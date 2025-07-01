@@ -1,0 +1,58 @@
+---
+title: "Figure 1 Replication"
+format: html
+author: Kellen Narke
+execute:
+    echo: false
+    message: false
+    warning: false
+---
+
+```{r}
+# Load libraries
+library(tidyverse)
+library(haven)
+library(patchwork)  # For combining plots
+```
+
+```{r}
+# Load the dataset (adjust path as needed)
+df <- read_dta("figure1data.dta")
+```
+
+```{r}
+# Filter for 1980–2012 only
+df_filtered <- df %>% 
+  filter(year >= 1980 & year <= 2012)
+```
+
+```{r}
+# Panel A: Violent crime
+p1 <- ggplot(df_filtered, aes(x = year, y = violentcrimerate)) +
+  geom_line(color = "navy") +
+  labs(
+    title = "A: Violent crimes",
+    x = "Year",
+    y = "Violent crimes per 100,000"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Panel B: Property crime
+p2 <- ggplot(df_filtered, aes(x = year, y = propertycrimerate)) +
+  geom_line(color = "navy") +
+  labs(
+    title = "B: Property crimes",
+    x = "Year",
+    y = "Property crimes per 100,000"
+  ) +
+  theme_minimal()
+```
+```{r}
+# Combine plots side by side
+p1 + p2 + 
+  plot_annotation(
+    title = "Trends in US Property Crime and Violent Crime Rates, 1980 through 2012 (per 100,000)",
+    theme = theme(plot.title = element_text(hjust = 0.5)))
+```
